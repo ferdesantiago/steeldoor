@@ -13,7 +13,7 @@ export class UserService {
   ) { }
 
   async findAll(search: string): Promise<User[]> {
-    return await this.userEntity.findAll({
+    let options: any = {
       attributes: ['id', 'name', 'email', 'role', 'resume'],
       where: {
         [Op.or]: [
@@ -34,7 +34,13 @@ export class UserService {
           }
         ]
       }
-    });
+    }
+    if (!search) {
+      options = {
+        attributes: ['id', 'name', 'email', 'role', 'resume']
+      }
+    }
+    return await this.userEntity.findAll(options);
   }
 
   async create(user: CreateUserDto): Promise<User> {
